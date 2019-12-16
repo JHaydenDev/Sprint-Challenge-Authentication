@@ -1,41 +1,54 @@
-const router = require("express").Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const db = require('./api-helper.js');
+const bcjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const secret = require("../config/secret.js");
-const Users = require("../users/usersModel.js");
+const router = require('express').Router();
 
-router.post("/register", (req, res) => {
-  // implement registration
-  const hash = bcrypt.hashSync(user.password, 14);
-  user.password = hash;
-
-  Users.add(user)
-    .then(saved => {
-      res.status(201).json(saved);
+router.post('/register', (req, res) => {
+  const creds = req.body;
+  const hash = bcjs.hashSync(creds.password, 8);
+  creds.password = hash;
+  db.addUser(creds)
+    .then(id => {
+      res.status(201).json(id);
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: 'Couldnt to add user' });
     });
 });
 
-router.post("/login", (req, res) => {
-  // implement login
-  let { username, password } = req.body;
-
-  Users.findBy({ username })
-    .first()
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  db.findBy({ username })
     .then(user => {
-      if (user && bcrypt.compareSync(password, user.password)) {
-        const token = generateToken(user);
-        res.status(200).json({ token });
+      if (user && bcjs.compareSync(password, user.password)) {
+        let token = generateToken(user);
+        res
+          .status(200)
+          .json({
+            message: `Welcome ${username}`,
+            token: token
+          });
       } else {
-        res.status(401).json({ message: "Invalid Credentials" });
+        res.status(401).json({ message: 'Invalid credentials' });
       }
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(err => {
+      res.status(500).json({ message: 'Error logging in' });
     });
 });
+
+function generateToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username
+  };
+  const options = {
+    expiresIn: '1h'
+  };
+  return jwt.sign(payload, 'blarg', options);
+}
 
 module.exports = router;
