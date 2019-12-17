@@ -8,7 +8,7 @@ describe("jokes router", () => {
     expect(res.status).toBe(401);
   });
 
-  it("should be a json response", async () => {
+  it("should be json", async () => {
     const res = await request(server).get("/api/jokes");
 
     expect(res.type).toBe("application/json");
