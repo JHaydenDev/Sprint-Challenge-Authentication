@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
         req.decodedJwt = decodedJwt;
         next();
       }
-    });
+    });  
   } else {
     res.status(401).json({ message: "Failed to authenticate" });
   }
