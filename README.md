@@ -32,6 +32,7 @@ Follow these steps for completing your project.
 
 ## Commits
 
+
 Commit your code regularly and use descriptive messages. This helps both you (in case you ever need to return to old code) and your Team Lead.
 
 ## Self-Study/Essay Questions
@@ -39,13 +40,14 @@ Commit your code regularly and use descriptive messages. This helps both you (in
 Demonstrate your understanding of this week's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 - [ ] What is the purpose of using _sessions_?
+ So the user doesn't have to keep authenticating every time they make a request.
 
 - [ ] What does bcrypt do to help us store passwords in a secure manner.
-
+Bcrypt hashs the passwords to encrypt them in the database.
 - [ ] What does bcrypt do to slow down attackers?
-
+ By adding salt and hashing passwords it makes it hard for hackers to create rainbow tables.
 - [ ] What are the three parts of the JSON Web Token?
-
+Header, Payload and Signature.
 ## Minimum Viable Product
 
 Implement an User Authentication System. Hash user's passwords before saving them to the database. Use `JSON Web Tokens` or `Sessions and Cookies` to persist authentication across requests.
